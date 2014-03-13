@@ -485,7 +485,7 @@ namespace UnityQuery {
             return WithHead(gameObjects);
         }
 
-        public UQObject ForEachComponent<T>(System.Action<T> action) where T : Component {
+        public UQObject ForEach<T>(System.Action<T> action) where T : Component {
             foreach (GameObject go in gameObjects) {
                 T component = go.GetComponent<T>();
                 if (component != null) {

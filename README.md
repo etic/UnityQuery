@@ -29,7 +29,7 @@ Here's what it looks like with UnityQuery:
 UQ(transform)
     .Children()
     .Even()
-    .ForEachComponent<Renderer>(r => r.sharedMaterial.color = Color.red);
+    .ForEach<Renderer>(r => r.sharedMaterial.color = Color.red);
 ```
 
 Version
