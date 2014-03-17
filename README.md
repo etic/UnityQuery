@@ -1,9 +1,15 @@
 UnityQuery
 ==========
 
-UnityQuery makes scene traversal in Unity3D cleaner.
+UnityQuery is a library for cleaner Unity3D scene traversal.
 
-Let's say you want to color every other child of the current GameObject red.  A straightforward implementation might look like this:
+LINQ makes it easy to handle enumerables in a functional style 90% of the time,
+but a lot of operations related to scene traversal in Unity still end up being
+verbose and no clearer than the straightforward implementation.  UnityQuery aims
+to fix this.
+
+Let's say you want to color every other child of the current GameObject red.
+A straightforward implementation might look like this:
 ```csharp
 for (int i = 0; i < transform.childCount; i += 2) {
     Transform child = transform.GetChild(i);
@@ -24,7 +30,7 @@ Enumerable
     .Select(r => r.sharedMaterial.color = Color.red);
 ```
 
-Here's what it looks like with UnityQuery:
+And with UnityQuery:
 ```csharp
 UQ(transform)
     .Children()
@@ -32,10 +38,38 @@ UQ(transform)
     .ForEach<Renderer>(r => r.sharedMaterial.color = Color.red);
 ```
 
-Version
-----
+UnityQuery wraps each query in a `UQObject`, which lets you return to earlier
+parts of a query without having to explicitly cache the results along the way.
 
-Don't use this (yet).  I'm pushing things to Github just 'cause.
+```csharp
+UQ(transform)
+    .Children()
+    .Even()
+        .ForEach<Renderer>(r => r.sharedMaterial.color = Color.red)
+        .End()
+    .Odd()
+        .ForEach<Renderer>(r => r.sharedMaterial.color = Color.blue);
+```
+
+`UQObject` implements `IEnumerable`, so you can use LINQ on the current query's
+GameObjects without any extra work.  To return to `UQObjects`, just use the
+`UQ()` extension.
+
+```csharp
+UQ(transform)
+    .Descendants()
+    .GetComponent<Renderer>()
+    .Where(r => r.sharedMaterial.color == Color.red)
+    .UQ()
+    .Hidden()
+    .Destroy();
+```
+
+Installation
+------------
+
+Clone the repository onto your machine and copy the `UQ` folder into your
+project's `Assets` folder.
 
 License
 ----
