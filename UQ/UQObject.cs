@@ -7,6 +7,9 @@ namespace UnityQuery {
 
     public class UQObject : IEnumerable<GameObject> {
 
+        /// <summary>
+        /// The list of GameObjects this UQObject represents.
+        /// </summary>
         private List<GameObject> gameObjects;
 
         /// <summary>
